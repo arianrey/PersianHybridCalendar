@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/calendar_main_layout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- date toolbar -->
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <!-- prev button -->
+        <ImageView
+            android:layout_weight="1"
+            android:id="@+id/calendar_prev_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_arrow_back_black_24dp"/>
+
+        <!-- date title -->
+        <TextView
+            android:layout_weight="6"
+            android:id="@+id/calendar_date_display"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textColor="#222222"
+            android:text="current date"/>
+
+
+
+        <!-- next button -->
+        <ImageView
+            android:layout_weight="1"
+            android:id="@+id/calendar_next_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:scaleX="1"
+            android:src="@drawable/ic_arrow_forward_black_24dp"/>
+    </LinearLayout>
+
+    <!-- days header -->
+    <LinearLayout
+        android:layout_weight="1"
+        android:id="@+id/calendar_header"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/day1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#222222"
+            android:text="SUN"/>
+
+        <TextView
+            android:id="@+id/day2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#222222"
+            android:text="MON"/>
+
+        <TextView
+            android:id="@+id/day3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#222222"
+            android:text="TUE"/>
+
+        <TextView
+            android:id="@+id/day4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#222222"
+            android:text="WED"/>
+
+        <TextView
+            android:id="@+id/day5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#222222"
+            android:text="THU"/>
+
+        <TextView
+            android:id="@+id/day6"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#222222"
+            android:text="FRI"/>
+
+        <TextView
+            android:id="@+id/day7"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#222222"
+            android:text="SAT"/>
+    </LinearLayout>
+
+    <!-- days view -->
+    <GridView
+        android:layout_weight="5"
+        android:id="@+id/calendar_grid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:numColumns="7"
+        android:descendantFocusability="blocksDescendants"/>
+</LinearLayout>
