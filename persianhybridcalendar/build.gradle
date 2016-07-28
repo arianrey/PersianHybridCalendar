@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
+    group = 'com.hybriddevs.persianhybridcalendar'
+    version = '0.9.0'
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.0.0-alpha1'
+}
+
+task generateSourcesJar(type: Jar) {
+    from 'com.hybriddevs.persianhybridcalendar'
+    classifier 'sources'
+}
+
+artifacts {
+    archives generateSourcesJar
+}
+
+bintray {
+    user = 'arianrey'
+    key = 'f03e24edc95d07eab3949d217e5e58a28fc58b87'
+    pkg {
+        repo = 'maven'
+        name = 'com.hybriddevs.persianhybridcalendar'
+
+        version {
+            name = '0.9.0'
+            desc = 'First Upload'
+            released  = new Date()
+            vcsTag = '0.9.0'
+        }
+
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/arianrey/PersianHybridCalendar.git'
+        websiteUrl = 'https://github.com/arianrey/PersianHybridCalendar.git'
+    }
+    configurations = ['archives']
+}

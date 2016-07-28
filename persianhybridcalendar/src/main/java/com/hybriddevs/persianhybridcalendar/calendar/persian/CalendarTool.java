@@ -1,4 +1,4 @@
-package com.ananasdevs.test.model.calendar.persian;
+package com.hybriddevs.persianhybridcalendar.calendar.persian;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;

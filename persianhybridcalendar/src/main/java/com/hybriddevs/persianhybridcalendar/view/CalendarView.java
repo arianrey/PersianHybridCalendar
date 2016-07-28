@@ -1,4 +1,4 @@
-package com.ananasdevs.test.view;
+package com.hybriddevs.persianhybridcalendar.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ananasdevs.test.R;
-import com.ananasdevs.test.model.calendar.persian.CalendarTool;
+import com.hybriddevs.persianhybridcalendar.R;
+import com.hybriddevs.persianhybridcalendar.calendar.persian.CalendarTool;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

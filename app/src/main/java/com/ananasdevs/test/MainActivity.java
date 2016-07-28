@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
-import com.ananasdevs.test.model.calendar.persian.CalendarTool;
-import com.ananasdevs.test.view.CalendarView;
+import com.hybriddevs.persianhybridcalendar.calendar.persian.CalendarTool;
+import com.hybriddevs.persianhybridcalendar.view.CalendarView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
