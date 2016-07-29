@@ -5,4 +5,16 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="FontSizeMedium">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="FontSizeSmall">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="FontSizeLarge">
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>

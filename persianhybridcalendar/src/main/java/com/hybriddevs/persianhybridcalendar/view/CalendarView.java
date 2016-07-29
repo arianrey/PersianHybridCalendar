@@ -1,6 +1,7 @@
 package com.hybriddevs.persianhybridcalendar.view;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class CalendarView extends LinearLayout {
     private Calendar currentDate = Calendar.getInstance();
     private CalendarTool currentDatePersian = new CalendarTool();
     private CalendarTool currentMonthPersian = new CalendarTool();
+    private Date selectedDate = new Date();
 
     //event handling
     private EventHandler eventHandler = null;
@@ -63,6 +65,14 @@ public class CalendarView extends LinearLayout {
         }
 
     }
+
+    public enum FontSize {
+        Large,
+        Medium,
+        Small;
+    }
+
+    FontSize fontSize = FontSize.Medium;
 
     //Date System of this CalendarView
     private DateSystem dateSystem;
@@ -95,6 +105,8 @@ public class CalendarView extends LinearLayout {
     int[] monthSeasonPersian = new int[]{3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 2, 2};
     int[] monthSeasonArabic = new int[]{2, 2, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2};
 
+    Typeface typefaceFarsi;
+
     public CalendarView(Context context) {
         super(context);
     }
@@ -116,6 +128,7 @@ public class CalendarView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.control_calendar, this);
 
+        typefaceFarsi = Typeface.createFromAsset(context.getAssets(), "BYekan.ttf");
 
         loadDateFormat(attrs);
         assignUiElements();
@@ -157,6 +170,48 @@ public class CalendarView extends LinearLayout {
         day6.setText(names[5]);
         day7 = (TextView) findViewById(R.id.day7);
         day7.setText(names[6]);
+        if (fontSize.equals(FontSize.Large)) {
+            day1.setTextAppearance(getContext(), R.style.FontSizeLarge);
+            day2.setTextAppearance(getContext(), R.style.FontSizeLarge);
+            day3.setTextAppearance(getContext(), R.style.FontSizeLarge);
+            day4.setTextAppearance(getContext(), R.style.FontSizeLarge);
+            day5.setTextAppearance(getContext(), R.style.FontSizeLarge);
+            day6.setTextAppearance(getContext(), R.style.FontSizeLarge);
+            day7.setTextAppearance(getContext(), R.style.FontSizeLarge);
+        } else if (fontSize.equals(FontSize.Medium)) {
+            day1.setTextAppearance(getContext(), R.style.FontSizeMedium);
+            day2.setTextAppearance(getContext(), R.style.FontSizeMedium);
+            day3.setTextAppearance(getContext(), R.style.FontSizeMedium);
+            day4.setTextAppearance(getContext(), R.style.FontSizeMedium);
+            day5.setTextAppearance(getContext(), R.style.FontSizeMedium);
+            day6.setTextAppearance(getContext(), R.style.FontSizeMedium);
+            day7.setTextAppearance(getContext(), R.style.FontSizeMedium);
+        } else {
+            day1.setTextAppearance(getContext(), R.style.FontSizeSmall);
+            day2.setTextAppearance(getContext(), R.style.FontSizeSmall);
+            day3.setTextAppearance(getContext(), R.style.FontSizeSmall);
+            day4.setTextAppearance(getContext(), R.style.FontSizeSmall);
+            day5.setTextAppearance(getContext(), R.style.FontSizeSmall);
+            day6.setTextAppearance(getContext(), R.style.FontSizeSmall);
+            day7.setTextAppearance(getContext(), R.style.FontSizeSmall);
+        }
+        if (dateSystem.equals(DateSystem.Persian) || dateSystem.equals(DateSystem.Arabic)) {
+            day1.setTypeface(typefaceFarsi, Typeface.BOLD);
+            day2.setTypeface(typefaceFarsi, Typeface.BOLD);
+            day3.setTypeface(typefaceFarsi, Typeface.BOLD);
+            day4.setTypeface(typefaceFarsi, Typeface.BOLD);
+            day5.setTypeface(typefaceFarsi, Typeface.BOLD);
+            day6.setTypeface(typefaceFarsi, Typeface.BOLD);
+            day7.setTypeface(typefaceFarsi, Typeface.BOLD);
+        } else {
+            day1.setTypeface(null, Typeface.BOLD);
+            day2.setTypeface(null, Typeface.BOLD);
+            day3.setTypeface(null, Typeface.BOLD);
+            day4.setTypeface(null, Typeface.BOLD);
+            day5.setTypeface(null, Typeface.BOLD);
+            day6.setTypeface(null, Typeface.BOLD);
+            day7.setTypeface(null, Typeface.BOLD);
+        }
     }
 
     private void loadDateFormat(AttributeSet attrs) {
@@ -179,6 +234,17 @@ public class CalendarView extends LinearLayout {
         btnNext = (ImageView) findViewById(R.id.calendar_next_button);
         txtDate = (TextView) findViewById(R.id.calendar_date_display);
         grid = (GridView) findViewById(R.id.calendar_grid);
+    }
+
+    public FontSize getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(FontSize fontSize) {
+        if (fontSize != null)
+            this.fontSize = fontSize;
+
+        updateCalendar();
     }
 
     private void assignClickHandlers() {
@@ -225,7 +291,9 @@ public class CalendarView extends LinearLayout {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // handle press
 
-                eventHandler.onDayPress((Date) parent.getItemAtPosition(position));
+                selectedDate = (Date) parent.getItemAtPosition(position);
+                updateCalendar();
+                eventHandler.onDayPress(selectedDate);
             }
         });
     }
@@ -265,7 +333,7 @@ public class CalendarView extends LinearLayout {
         Calendar calendar = (Calendar) currentDate.clone();
 
         // determine the cell for current month's beginning
-        calendar.add(Calendar.DATE, 1 - calendarTool.getIranianDay());
+        calendar.add(Calendar.DATE, 0 - calendarTool.getIranianDay());
         CalendarTool firstDayOfMonth = new CalendarTool(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE));
 
         //int monthBeginningCell = calendar.get(Calendar.DAY_OF_WEEK) - 1;
@@ -287,6 +355,14 @@ public class CalendarView extends LinearLayout {
         //SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         calendarTool = currentMonthPersian;
         txtDate.setText(calendarTool.getPersianMonthName(calendarTool.getIranianMonth() - 1) + " " + calendarTool.getIranianYear());
+        if (fontSize.equals(FontSize.Large)) {
+            txtDate.setTextAppearance(getContext(), R.style.FontSizeLarge);
+        } else if (fontSize.equals(FontSize.Medium)) {
+            txtDate.setTextAppearance(getContext(), R.style.FontSizeMedium);
+        } else {
+            txtDate.setTextAppearance(getContext(), R.style.FontSizeSmall);
+        }
+        txtDate.setTypeface(typefaceFarsi, Typeface.BOLD);
 
         // set header color according to current season
         int month = calendarTool.getIranianMonth() - 1;
@@ -319,6 +395,14 @@ public class CalendarView extends LinearLayout {
         // update title
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         txtDate.setText(sdf.format(currentDate.getTime()));
+        if (fontSize.equals(FontSize.Large)) {
+            txtDate.setTextAppearance(getContext(), R.style.FontSizeLarge);
+        } else if (fontSize.equals(FontSize.Medium)) {
+            txtDate.setTextAppearance(getContext(), R.style.FontSizeMedium);
+        } else {
+            txtDate.setTextAppearance(getContext(), R.style.FontSizeSmall);
+        }
+        txtDate.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 
         // set header color according to current season
         int month = currentDate.get(Calendar.MONTH);
@@ -330,6 +414,7 @@ public class CalendarView extends LinearLayout {
 
     /**
      * Choose the type of calendar from DateSystem class
+     *
      * @param dateSystem
      */
     public void setDateSystem(DateSystem dateSystem) {
@@ -347,11 +432,13 @@ public class CalendarView extends LinearLayout {
 
         // for view inflation
         private LayoutInflater inflater;
+        private Typeface typefacefarsi;
 
         public CalendarAdapter(Context context, ArrayList<Date> days, HashSet<Date> eventDays) {
             super(context, R.layout.control_calendar_day, days);
             this.eventDays = eventDays;
             inflater = LayoutInflater.from(context);
+            typefacefarsi = Typeface.createFromAsset(context.getAssets(), "BYekan.ttf");
         }
 
         @Override
@@ -388,7 +475,7 @@ public class CalendarView extends LinearLayout {
             // inflate item if it does not exist yet
             if (view == null)
                 view = inflater.inflate(R.layout.control_calendar_day, parent, false);
-            view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, grid.getHeight()/6));
+            view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, grid.getHeight() / 6));
 
             // if this day has an event, specify event image
             view.setBackgroundResource(0);
@@ -405,7 +492,14 @@ public class CalendarView extends LinearLayout {
             }
 
             // clear styling
-            ((TextView) view).setTypeface(null, Typeface.NORMAL);
+            if (fontSize.equals(FontSize.Large)) {
+                ((TextView) view).setTextAppearance(getContext(), R.style.FontSizeLarge);
+            } else if (fontSize.equals(FontSize.Medium)) {
+                ((TextView) view).setTextAppearance(getContext(), R.style.FontSizeMedium);
+            } else {
+                ((TextView) view).setTextAppearance(getContext(), R.style.FontSizeSmall);
+            }
+            ((TextView) view).setTypeface(typefacefarsi, Typeface.NORMAL);
             ((TextView) view).setTextColor(Color.BLACK);
 
             if (calendarTool.getIranianMonth() != currentMonthPersian.getIranianMonth() || calendarTool.getIranianYear() != currentMonthPersian.getIranianYear()) {
@@ -413,8 +507,11 @@ public class CalendarView extends LinearLayout {
                 ((TextView) view).setTextColor(getResources().getColor(R.color.greyed_out));
             } else if (calendarTool.getIranianDay() == today.getIranianDay() && calendarTool.getIranianMonth() == today.getIranianMonth() && calendarTool.getIranianYear() == today.getIranianYear()) {
                 // if it is today, set it to blue/bold
-                ((TextView) view).setTypeface(null, Typeface.BOLD);
+                ((TextView) view).setTypeface(typefacefarsi, Typeface.BOLD);
                 ((TextView) view).setTextColor(getResources().getColor(R.color.today));
+            }
+            if (date.equals(selectedDate)) {
+                ((TextView) view).setBackground(getResources().getDrawable(R.drawable.ic_brightness_1_black_24dp));
             }
 
             // set text
@@ -443,7 +540,7 @@ public class CalendarView extends LinearLayout {
             // inflate item if it does not exist yet
             if (view == null)
                 view = inflater.inflate(R.layout.control_calendar_day, parent, false);
-            view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, grid.getHeight()/6));
+            view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, grid.getHeight() / 6));
 
             // if this day has an event, specify event image
             view.setBackgroundResource(0);
@@ -460,6 +557,13 @@ public class CalendarView extends LinearLayout {
             }
 
             // clear styling
+            if (fontSize.equals(FontSize.Large)) {
+                ((TextView) view).setTextAppearance(getContext(), R.style.FontSizeLarge);
+            } else if (fontSize.equals(FontSize.Medium)) {
+                ((TextView) view).setTextAppearance(getContext(), R.style.FontSizeMedium);
+            } else {
+                ((TextView) view).setTextAppearance(getContext(), R.style.FontSizeSmall);
+            }
             ((TextView) view).setTypeface(null, Typeface.NORMAL);
             ((TextView) view).setTextColor(Color.BLACK);
 
@@ -470,6 +574,9 @@ public class CalendarView extends LinearLayout {
                 // if it is today, set it to blue/bold
                 ((TextView) view).setTypeface(null, Typeface.BOLD);
                 ((TextView) view).setTextColor(getResources().getColor(R.color.today));
+            }
+            if (date.equals(selectedDate)) {
+                ((TextView) view).setBackground(getResources().getDrawable(R.drawable.ic_brightness_1_black_24dp));
             }
             // set text
             ((TextView) view).setText(String.valueOf(date.getDate()));

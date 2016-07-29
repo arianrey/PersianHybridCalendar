@@ -30,8 +30,8 @@ public class MainActivity extends Activity {
 
         cv = ((CalendarView)findViewById(R.id.calendar_view));
         cv.setDateSystem(CalendarView.DateSystem.Persian);
+        cv.setFontSize(CalendarView.FontSize.Small);
         //cv.updateCalendar(events);
-        cv.setSize(300, 300);
         // assign event handler
         cv.setEventHandler(new CalendarView.EventHandler() {
             @Override
