@@ -6,7 +6,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
     group = 'com.hybriddevs.persianhybridcalendar'
-    version = '0.9.2'
+    version = '0.9.3'
 
     defaultConfig {
         minSdkVersion 19
@@ -48,10 +48,10 @@ bintray {
         name = 'com.hybriddevs.persianhybridcalendar'
 
         version {
-            name = '0.9.2'
+            name = '0.9.3'
             desc = 'Added Selected Date and font size option'
             released  = new Date()
-            vcsTag = '0.9.2'
+            vcsTag = '0.9.3'
         }
 
         licenses = ['Apache-2.0']

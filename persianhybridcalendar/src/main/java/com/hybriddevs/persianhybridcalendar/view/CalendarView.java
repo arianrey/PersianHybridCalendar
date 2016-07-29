@@ -1,7 +1,6 @@
 package com.hybriddevs.persianhybridcalendar.view;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,8 +127,6 @@ public class CalendarView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.control_calendar, this);
 
-        typefaceFarsi = Typeface.createFromAsset(context.getAssets(), "BYekan.ttf");
-
         loadDateFormat(attrs);
         assignUiElements();
         assignClickHandlers();
@@ -195,6 +192,10 @@ public class CalendarView extends LinearLayout {
             day6.setTextAppearance(getContext(), R.style.FontSizeSmall);
             day7.setTextAppearance(getContext(), R.style.FontSizeSmall);
         }
+        setDaysTypeface();
+    }
+
+    private void setDaysTypeface() {
         if (dateSystem.equals(DateSystem.Persian) || dateSystem.equals(DateSystem.Arabic)) {
             day1.setTypeface(typefaceFarsi, Typeface.BOLD);
             day2.setTypeface(typefaceFarsi, Typeface.BOLD);
@@ -425,6 +426,11 @@ public class CalendarView extends LinearLayout {
         updateCalendar();
     }
 
+    public void setTypefaceFarsi(Typeface typefaceFarsi) {
+        this.typefaceFarsi = typefaceFarsi;
+        txtDate.setTypeface(typefaceFarsi, Typeface.BOLD);
+        setDaysTypeface();
+    }
 
     private class CalendarAdapter extends ArrayAdapter<Date> {
         // days with events
@@ -432,13 +438,11 @@ public class CalendarView extends LinearLayout {
 
         // for view inflation
         private LayoutInflater inflater;
-        private Typeface typefacefarsi;
 
         public CalendarAdapter(Context context, ArrayList<Date> days, HashSet<Date> eventDays) {
             super(context, R.layout.control_calendar_day, days);
             this.eventDays = eventDays;
             inflater = LayoutInflater.from(context);
-            typefacefarsi = Typeface.createFromAsset(context.getAssets(), "BYekan.ttf");
         }
 
         @Override
@@ -499,7 +503,7 @@ public class CalendarView extends LinearLayout {
             } else {
                 ((TextView) view).setTextAppearance(getContext(), R.style.FontSizeSmall);
             }
-            ((TextView) view).setTypeface(typefacefarsi, Typeface.NORMAL);
+            ((TextView) view).setTypeface(typefaceFarsi, Typeface.NORMAL);
             ((TextView) view).setTextColor(Color.BLACK);
 
             if (calendarTool.getIranianMonth() != currentMonthPersian.getIranianMonth() || calendarTool.getIranianYear() != currentMonthPersian.getIranianYear()) {
@@ -507,7 +511,7 @@ public class CalendarView extends LinearLayout {
                 ((TextView) view).setTextColor(getResources().getColor(R.color.greyed_out));
             } else if (calendarTool.getIranianDay() == today.getIranianDay() && calendarTool.getIranianMonth() == today.getIranianMonth() && calendarTool.getIranianYear() == today.getIranianYear()) {
                 // if it is today, set it to blue/bold
-                ((TextView) view).setTypeface(typefacefarsi, Typeface.BOLD);
+                ((TextView) view).setTypeface(typefaceFarsi, Typeface.BOLD);
                 ((TextView) view).setTextColor(getResources().getColor(R.color.today));
             }
             if (date.equals(selectedDate)) {

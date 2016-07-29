@@ -1,6 +1,7 @@
 package com.ananasdevs.test;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +32,7 @@ public class MainActivity extends Activity {
         cv = ((CalendarView)findViewById(R.id.calendar_view));
         cv.setDateSystem(CalendarView.DateSystem.Persian);
         cv.setFontSize(CalendarView.FontSize.Small);
+        cv.setTypefaceFarsi(Typeface.createFromAsset(getAssets(), "BYekan.ttf"));
         //cv.updateCalendar(events);
         // assign event handler
         cv.setEventHandler(new CalendarView.EventHandler() {
