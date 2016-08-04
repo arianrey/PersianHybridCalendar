@@ -45,9 +45,11 @@ public class CalendarView extends LinearLayout {
 
     // current displayed month
     private Calendar currentDate = Calendar.getInstance();
-    private CalendarTool currentDatePersian = new CalendarTool();
     private CalendarTool currentMonthPersian = new CalendarTool();
     private Date selectedDate = new Date();
+    private HashSet<Date> selectedDates = new HashSet<>();
+
+    private boolean multiSelect = false;
 
     //event handling
     private EventHandler eventHandler = null;
@@ -57,7 +59,7 @@ public class CalendarView extends LinearLayout {
 
         Gregorian("میلادی"),
         Persian("هجری شمسی"),
-        Arabic("هجری قمری");
+        @Deprecated  Arabic("هجری قمری");
 
         DateSystem(String system) {
 
@@ -126,6 +128,11 @@ public class CalendarView extends LinearLayout {
     private void initControl(Context context, AttributeSet attrs) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.control_calendar, this);
+
+        selectedDate.setHours(0);
+        selectedDate.setMinutes(0);
+        selectedDate.setSeconds(0);
+        selectedDates.add(selectedDate);
 
         loadDateFormat(attrs);
         assignUiElements();
@@ -197,21 +204,21 @@ public class CalendarView extends LinearLayout {
 
     private void setDaysTypeface() {
         if (dateSystem.equals(DateSystem.Persian) || dateSystem.equals(DateSystem.Arabic)) {
-            day1.setTypeface(typefaceFarsi, Typeface.BOLD);
-            day2.setTypeface(typefaceFarsi, Typeface.BOLD);
-            day3.setTypeface(typefaceFarsi, Typeface.BOLD);
-            day4.setTypeface(typefaceFarsi, Typeface.BOLD);
-            day5.setTypeface(typefaceFarsi, Typeface.BOLD);
-            day6.setTypeface(typefaceFarsi, Typeface.BOLD);
-            day7.setTypeface(typefaceFarsi, Typeface.BOLD);
+            day1.setTypeface(typefaceFarsi, Typeface.NORMAL);
+            day2.setTypeface(typefaceFarsi, Typeface.NORMAL);
+            day3.setTypeface(typefaceFarsi, Typeface.NORMAL);
+            day4.setTypeface(typefaceFarsi, Typeface.NORMAL);
+            day5.setTypeface(typefaceFarsi, Typeface.NORMAL);
+            day6.setTypeface(typefaceFarsi, Typeface.NORMAL);
+            day7.setTypeface(typefaceFarsi, Typeface.NORMAL);
         } else {
-            day1.setTypeface(null, Typeface.BOLD);
-            day2.setTypeface(null, Typeface.BOLD);
-            day3.setTypeface(null, Typeface.BOLD);
-            day4.setTypeface(null, Typeface.BOLD);
-            day5.setTypeface(null, Typeface.BOLD);
-            day6.setTypeface(null, Typeface.BOLD);
-            day7.setTypeface(null, Typeface.BOLD);
+            day1.setTypeface(null, Typeface.NORMAL);
+            day2.setTypeface(null, Typeface.NORMAL);
+            day3.setTypeface(null, Typeface.NORMAL);
+            day4.setTypeface(null, Typeface.NORMAL);
+            day5.setTypeface(null, Typeface.NORMAL);
+            day6.setTypeface(null, Typeface.NORMAL);
+            day7.setTypeface(null, Typeface.NORMAL);
         }
     }
 
@@ -282,8 +289,7 @@ public class CalendarView extends LinearLayout {
                 if (eventHandler == null)
                     return false;
 
-                eventHandler.onDayLongPress((Date) view.getItemAtPosition(position));
-                return true;
+                return eventHandler.onDayLongPress((Date) view.getItemAtPosition(position));
             }
         });
 
@@ -293,6 +299,13 @@ public class CalendarView extends LinearLayout {
                 // handle press
 
                 selectedDate = (Date) parent.getItemAtPosition(position);
+                if (isMultiSelect()) {
+                    if(selectedDates.contains(selectedDate)) {
+                        selectedDates.remove(selectedDate);
+                    } else {
+                        selectedDates.add(selectedDate);
+                    }
+                }
                 updateCalendar();
                 eventHandler.onDayPress(selectedDate);
             }
@@ -426,6 +439,16 @@ public class CalendarView extends LinearLayout {
         updateCalendar();
     }
 
+    public boolean isMultiSelect() {
+        return multiSelect;
+    }
+
+    public void setMultiSelect(boolean multiSelect) {
+        this.multiSelect = multiSelect;
+
+        updateCalendar();
+    }
+
     public void setTypefaceFarsi(Typeface typefaceFarsi) {
         this.typefaceFarsi = typefaceFarsi;
         txtDate.setTypeface(typefaceFarsi, Typeface.BOLD);
@@ -514,9 +537,16 @@ public class CalendarView extends LinearLayout {
                 ((TextView) view).setTypeface(typefaceFarsi, Typeface.BOLD);
                 ((TextView) view).setTextColor(getResources().getColor(R.color.today));
             }
-            if (date.equals(selectedDate)) {
-                ((TextView) view).setBackground(getResources().getDrawable(R.drawable.ic_brightness_1_black_24dp));
+            if(isMultiSelect()) {
+                if(selectedDates.contains(date)) {
+                    ((TextView) view).setBackground(getResources().getDrawable(R.drawable.selected_background));
+                }
+            } else {
+                if (date.equals(selectedDate)) {
+                    ((TextView) view).setBackground(getResources().getDrawable(R.drawable.selected_background));
+                }
             }
+
 
             // set text
             ((TextView) view).setText(String.valueOf(calendarTool.getIranianDay()));
@@ -579,8 +609,14 @@ public class CalendarView extends LinearLayout {
                 ((TextView) view).setTypeface(null, Typeface.BOLD);
                 ((TextView) view).setTextColor(getResources().getColor(R.color.today));
             }
-            if (date.equals(selectedDate)) {
-                ((TextView) view).setBackground(getResources().getDrawable(R.drawable.ic_brightness_1_black_24dp));
+            if(isMultiSelect()) {
+                if(selectedDates.contains(date)) {
+                    ((TextView) view).setBackground(getResources().getDrawable(R.drawable.selected_background));
+                }
+            } else {
+                if (date.equals(selectedDate)) {
+                    ((TextView) view).setBackground(getResources().getDrawable(R.drawable.selected_background));
+                }
             }
             // set text
             ((TextView) view).setText(String.valueOf(date.getDate()));
@@ -656,9 +692,14 @@ public class CalendarView extends LinearLayout {
      * the outside world
      */
     public interface EventHandler {
-        void onDayLongPress(Date date);
+        boolean onDayLongPress(Date date);
 
         void onDayPress(Date date);
     }
+
+    public HashSet<Date> getSelectedDates() {
+        return selectedDates;
+    }
+
 }
 
