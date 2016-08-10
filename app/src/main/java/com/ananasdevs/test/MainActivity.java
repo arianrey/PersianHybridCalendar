@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.hybriddevs.persianhybridcalendar.calendar.persian.CalendarTool;
 import com.hybriddevs.persianhybridcalendar.view.CalendarView;
+import com.hybriddevs.persianhybridcalendar.view.CalendarViewDialog;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,7 +33,7 @@ public class MainActivity extends Activity {
         cv = ((CalendarView)findViewById(R.id.calendar_view));
         cv.setDateSystem(CalendarView.DateSystem.Persian);
         cv.setFontSize(CalendarView.FontSize.Large);
-        cv.setMultiSelect(true);
+        cv.setMultiSelect(false);
         cv.setTypefaceFarsi(Typeface.createFromAsset(getAssets(), "BYekan.ttf"));
         //cv.updateCalendar(events);
         // assign event handler
@@ -60,6 +61,21 @@ public class MainActivity extends Activity {
 
     public void Gregorian(View v) {
         cv.setDateSystem(CalendarView.DateSystem.Gregorian);
+    }
+
+    public void openDialog(View view) {
+        CalendarViewDialog calendarViewDialog = new CalendarViewDialog(this, CalendarView.DateSystem.Persian, CalendarView.FontSize.Large, false, Typeface.createFromAsset(getAssets(), "BYekan.ttf")) {
+            @Override
+            public void onClickOK() {
+                HashSet<Date> dates = getSelectedDates();
+                String s = "";
+                for(Date date : dates) {
+                    s += date.toString();
+                }
+                Toast.makeText(MainActivity.this, s, Toast.LENGTH_LONG).show();
+            }
+        };
+        calendarViewDialog.show();
     }
 
     @Override

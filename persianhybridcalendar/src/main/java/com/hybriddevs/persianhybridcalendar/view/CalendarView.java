@@ -129,9 +129,6 @@ public class CalendarView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.control_calendar, this);
 
-        selectedDate.setHours(0);
-        selectedDate.setMinutes(0);
-        selectedDate.setSeconds(0);
         selectedDates.add(selectedDate);
 
         loadDateFormat(attrs);
@@ -537,12 +534,14 @@ public class CalendarView extends LinearLayout {
                 ((TextView) view).setTypeface(typefaceFarsi, Typeface.BOLD);
                 ((TextView) view).setTextColor(getResources().getColor(R.color.today));
             }
+
+            // selected dates background
             if(isMultiSelect()) {
                 if(selectedDates.contains(date)) {
                     ((TextView) view).setBackground(getResources().getDrawable(R.drawable.selected_background));
                 }
             } else {
-                if (date.equals(selectedDate)) {
+                if (date.getYear()==selectedDate.getYear() && date.getMonth() == selectedDate.getMonth() && date.getDate() == selectedDate.getDate()) {
                     ((TextView) view).setBackground(getResources().getDrawable(R.drawable.selected_background));
                 }
             }
