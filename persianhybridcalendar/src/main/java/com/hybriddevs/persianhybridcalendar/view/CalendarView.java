@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -129,6 +130,11 @@ public class CalendarView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.control_calendar, this);
 
+        currentDate.set(Calendar.SECOND, 0);
+        currentDate.set(Calendar.MINUTE, 0);
+        currentDate.set(Calendar.HOUR_OF_DAY, 0);
+        currentDate.set(Calendar.MILLISECOND, 0);
+        selectedDate = currentDate.getTime();
         selectedDates.add(selectedDate);
 
         loadDateFormat(attrs);
@@ -541,7 +547,7 @@ public class CalendarView extends LinearLayout {
                     ((TextView) view).setBackground(getResources().getDrawable(R.drawable.selected_background));
                 }
             } else {
-                if (date.getYear()==selectedDate.getYear() && date.getMonth() == selectedDate.getMonth() && date.getDate() == selectedDate.getDate()) {
+                if (date.equals(selectedDate)) {
                     ((TextView) view).setBackground(getResources().getDrawable(R.drawable.selected_background));
                 }
             }
@@ -698,6 +704,21 @@ public class CalendarView extends LinearLayout {
 
     public HashSet<Date> getSelectedDates() {
         return selectedDates;
+    }
+
+    public void setDefaultSelectedDates(HashSet<Date> selectedDates) {
+        HashSet<Date> temp = new HashSet<>();
+        Iterator<Date> iterator = selectedDates.iterator();
+        while (iterator.hasNext()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(iterator.next());
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            temp.add(calendar.getTime());
+        }
+        this.selectedDates = temp;
     }
 
 }

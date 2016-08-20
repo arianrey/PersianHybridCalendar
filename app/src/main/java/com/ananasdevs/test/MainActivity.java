@@ -14,6 +14,7 @@ import com.hybriddevs.persianhybridcalendar.view.CalendarViewDialog;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -27,13 +28,22 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        HashSet<Date> dates = new HashSet<>();
+        Calendar calendar = Calendar.getInstance();
+        dates.add(calendar.getTime());
+        calendar.add(Calendar.DAY_OF_MONTH, 2);
+        dates.add(calendar.getTime());
+        calendar.add(Calendar.DAY_OF_MONTH, -6);
+        dates.add(calendar.getTime());
+
         HashSet<Date> events = new HashSet<>();
         events.add(new Date());
 
         cv = ((CalendarView)findViewById(R.id.calendar_view));
         cv.setDateSystem(CalendarView.DateSystem.Persian);
         cv.setFontSize(CalendarView.FontSize.Large);
-        cv.setMultiSelect(false);
+        cv.setDefaultSelectedDates(dates);
+        cv.setMultiSelect(true);
         cv.setTypefaceFarsi(Typeface.createFromAsset(getAssets(), "BYekan.ttf"));
         //cv.updateCalendar(events);
         // assign event handler

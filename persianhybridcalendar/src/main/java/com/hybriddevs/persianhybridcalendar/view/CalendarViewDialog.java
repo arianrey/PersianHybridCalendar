@@ -59,6 +59,11 @@ public abstract class CalendarViewDialog extends AlertDialog implements DialogIn
 
     }
 
+    public CalendarViewDialog(Context context, CalendarView.DateSystem dateSystem, CalendarView.FontSize fontSize, boolean multiSelect, Typeface farsiTypeface, HashSet<Date> selectedDates) {
+        this(context, dateSystem, fontSize, multiSelect, farsiTypeface);
+        mCalendarView.setDefaultSelectedDates(selectedDates);
+    }
+
     public CalendarViewDialog(Context context, CalendarView.DateSystem dateSystem, CalendarView.FontSize fontSize, boolean multiSelect, Typeface farsiTypeface,int theme) {
         this(context, dateSystem, fontSize, multiSelect, farsiTypeface);
     }
