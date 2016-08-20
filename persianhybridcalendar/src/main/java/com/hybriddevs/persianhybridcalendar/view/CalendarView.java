@@ -60,7 +60,7 @@ public class CalendarView extends LinearLayout {
 
         Gregorian("میلادی"),
         Persian("هجری شمسی"),
-        @Deprecated  Arabic("هجری قمری");
+        @Deprecated Arabic("هجری قمری");
 
         DateSystem(String system) {
 
@@ -303,7 +303,7 @@ public class CalendarView extends LinearLayout {
 
                 selectedDate = (Date) parent.getItemAtPosition(position);
                 if (isMultiSelect()) {
-                    if(selectedDates.contains(selectedDate)) {
+                    if (selectedDates.contains(selectedDate)) {
                         selectedDates.remove(selectedDate);
                     } else {
                         selectedDates.add(selectedDate);
@@ -542,8 +542,8 @@ public class CalendarView extends LinearLayout {
             }
 
             // selected dates background
-            if(isMultiSelect()) {
-                if(selectedDates.contains(date)) {
+            if (isMultiSelect()) {
+                if (selectedDates.contains(date)) {
                     ((TextView) view).setBackground(getResources().getDrawable(R.drawable.selected_background));
                 }
             } else {
@@ -614,8 +614,8 @@ public class CalendarView extends LinearLayout {
                 ((TextView) view).setTypeface(null, Typeface.BOLD);
                 ((TextView) view).setTextColor(getResources().getColor(R.color.today));
             }
-            if(isMultiSelect()) {
-                if(selectedDates.contains(date)) {
+            if (isMultiSelect()) {
+                if (selectedDates.contains(date)) {
                     ((TextView) view).setBackground(getResources().getDrawable(R.drawable.selected_background));
                 }
             } else {
@@ -707,18 +707,20 @@ public class CalendarView extends LinearLayout {
     }
 
     public void setDefaultSelectedDates(HashSet<Date> selectedDates) {
-        HashSet<Date> temp = new HashSet<>();
-        Iterator<Date> iterator = selectedDates.iterator();
-        while (iterator.hasNext()) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(iterator.next());
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            temp.add(calendar.getTime());
+        if (selectedDates != null) {
+            HashSet<Date> temp = new HashSet<>();
+            Iterator<Date> iterator = selectedDates.iterator();
+            while (iterator.hasNext()) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(iterator.next());
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                temp.add(calendar.getTime());
+            }
+            this.selectedDates = temp;
         }
-        this.selectedDates = temp;
     }
 
 }

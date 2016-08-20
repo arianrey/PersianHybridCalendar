@@ -16,13 +16,13 @@ import java.util.HashSet;
 /**
  * Created by arian on 8/7/2016.
  */
-public abstract class CalendarViewDialog extends AlertDialog implements DialogInterface.OnClickListener{
+public abstract class CalendarViewDialog extends AlertDialog implements DialogInterface.OnClickListener {
 
     protected CalendarView mCalendarView;
     protected HashSet<Date> selectedDates;
     protected Date selectedDate;
 
-    public CalendarViewDialog(Context context, CalendarView.DateSystem dateSystem, CalendarView.FontSize fontSize, boolean multiSelect, Typeface farsiTypeface) {
+    private CalendarViewDialog(Context context, CalendarView.DateSystem dateSystem, CalendarView.FontSize fontSize, boolean multiSelect, Typeface farsiTypeface) {
         super(context);
 
         final LayoutInflater inflater = LayoutInflater.from(context);
@@ -61,10 +61,12 @@ public abstract class CalendarViewDialog extends AlertDialog implements DialogIn
 
     public CalendarViewDialog(Context context, CalendarView.DateSystem dateSystem, CalendarView.FontSize fontSize, boolean multiSelect, Typeface farsiTypeface, HashSet<Date> selectedDates) {
         this(context, dateSystem, fontSize, multiSelect, farsiTypeface);
-        mCalendarView.setDefaultSelectedDates(selectedDates);
+        if (selectedDates != null) {
+            mCalendarView.setDefaultSelectedDates(selectedDates);
+        }
     }
 
-    public CalendarViewDialog(Context context, CalendarView.DateSystem dateSystem, CalendarView.FontSize fontSize, boolean multiSelect, Typeface farsiTypeface,int theme) {
+    public CalendarViewDialog(Context context, CalendarView.DateSystem dateSystem, CalendarView.FontSize fontSize, boolean multiSelect, Typeface farsiTypeface, int theme) {
         this(context, dateSystem, fontSize, multiSelect, farsiTypeface);
     }
 
